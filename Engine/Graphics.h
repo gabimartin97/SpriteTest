@@ -62,17 +62,17 @@ public:
 	}
 	void PutPixel( int x,int y,Color c );
 	template<typename E>
-	void DrawSprite( int x,int y,const Surface& s,E effect )
+	void DrawSprite( int x,int y,const Surface& s,E effect)
 	{
 		DrawSprite( x,y,s.GetRect(),s,effect );
 	}
 	template<typename E>
-	void DrawSprite( int x,int y,const RectI& srcRect,const Surface& s,E effect )
+	void DrawSprite( int x,int y,const RectI& srcRect,const Surface& s,E effect)
 	{
 		DrawSprite( x,y,srcRect,GetScreenRect(),s,effect );
 	}
 	template<typename E>
-	void DrawSprite( int x,int y,RectI srcRect,const RectI& clip,const Surface& s,E effect )
+	void DrawSprite( int x,int y,RectI srcRect,const RectI& clip,const Surface& s,E effect)
 	{
 		assert( srcRect.left >= 0 );
 		assert( srcRect.right <= s.GetWidth() );

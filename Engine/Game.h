@@ -29,6 +29,7 @@
 #include "Character.h"
 #include "Font.h"
 #include "Sound.h"
+#include "SpriteEffect.h"
 
 class Game
 {
@@ -52,5 +53,6 @@ private:
 	Character link = Character( { 100.0f,100.0f } );
 	Font font = "Images\\Fixedsys16x28.bmp";
 	Sound hit = L"Sounds\\hit.wav";
+	Surface background = "Images\\Background.bmp";
 	/********************************/
 };
