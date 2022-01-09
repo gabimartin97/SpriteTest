@@ -2,6 +2,7 @@
 
 #include "Animation.h"
 #include "Vec2.h"
+#include "SpriteEffect.h"
 
 class Character
 {
@@ -29,6 +30,7 @@ private:
 	Surface sprite = "Images\\Character64x64.bmp";
 	Vec2 pos;
 	Vec2 vel = { 0.0f,0.0f };
+	const Color chroma = Colors::Magenta;
 	std::vector<Animation> animations;
 	Sequence iCurSequence = Sequence::StandingDown;
 	float speed = 110.0f;

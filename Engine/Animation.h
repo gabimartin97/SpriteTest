@@ -9,11 +9,23 @@ class Animation
 {
 public:
 	Animation( int x,int y,int width,int height,int count,const Surface& sprite,float holdTime,Color chroma = Colors::Magenta );
-	void Draw( const Vei2& pos,Graphics& gfx ) const;
-	void Draw( const Vei2& pos,Graphics& gfx,const RectI& clip ) const;
+	
+	
 	// this version of draw replaces all opaque pixels with specified color
-	void DrawColor( const Vei2& pos,Graphics& gfx,Color c ) const;
+	
 	void Update( float dt );
+public:
+	template<typename E>
+	void Draw(const Vei2& pos, Graphics& gfx, E effect) const
+	{
+		Draw(pos,gfx, effect, gfx.GetScreenRect());
+	}
+
+	template<typename E>
+	void Draw(const Vei2& pos, Graphics& gfx, E effect, const RectI& clip) const
+	{
+		gfx.DrawSprite(pos.x, pos.y, frames[iCurFrame], clip, sprite, effect);
+	}
 private:
 	void Advance();
 private:

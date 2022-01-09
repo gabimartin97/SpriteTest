@@ -72,4 +72,23 @@ namespace SpriteEffect
 	private:
 		Color chroma;
 	};
+	class Damage
+	{
+	public:
+		Damage(Color c)
+			:
+			chroma(c)
+		{}
+		void operator()(Color src, int xDest, int yDest, Graphics& gfx) const
+		{
+			
+			if (src != chroma)
+			{
+				const Color blend = { 255, src.GetG(),src.GetB() };
+				gfx.PutPixel(xDest, yDest, blend);
+			}
+		}
+	private:
+		Color chroma;
+	};
 }
