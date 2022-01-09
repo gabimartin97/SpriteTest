@@ -16,15 +16,15 @@ public:
 	void Update( float dt );
 public:
 	template<typename E>
-	void Draw(const Vei2& pos, Graphics& gfx, E effect) const
+	void Draw(const Vei2& pos, Graphics& gfx, E effect, bool reversed = false) const
 	{
-		Draw(pos,gfx, effect, gfx.GetScreenRect());
+		Draw(pos,gfx, effect, gfx.GetScreenRect(), reversed);
 	}
 
 	template<typename E>
-	void Draw(const Vei2& pos, Graphics& gfx, E effect, const RectI& clip) const
+	void Draw(const Vei2& pos, Graphics& gfx, E effect, const RectI& clip, bool reversed = false) const
 	{
-		gfx.DrawSprite(pos.x, pos.y, frames[iCurFrame], clip, sprite, effect);
+		gfx.DrawSprite(pos.x, pos.y, frames[iCurFrame], clip, sprite, effect, reversed);
 	}
 private:
 	void Advance();

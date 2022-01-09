@@ -32,7 +32,7 @@ private:
 	Vec2 vel = { 0.0f,0.0f };
 	const Color chroma = Colors::Magenta;
 	std::vector<Animation> animations;
-	Sequence iCurSequence = Sequence::StandingDown;
+	Sequence iCurSequence = Sequence::StandingRight;
 	float speed = 110.0f;
 	static constexpr float effectDuration = 0.045f;
 	float effectTime = 0.0f;

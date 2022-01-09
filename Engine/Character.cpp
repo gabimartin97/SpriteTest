@@ -17,13 +17,14 @@ Character::Character( const Vec2& pos )
 void Character::Draw( Graphics& gfx ) const
 {
 	// if effect active, draw sprite replacing opaque pixels with red
+	bool reversed = iCurSequence == Sequence::WalkingLeft || iCurSequence == Sequence::StandingLeft;
 	if( effectActive )
 	{
-		animations[(int)iCurSequence].Draw((Vei2)pos, gfx, SpriteEffect::Damage(chroma));
+		animations[(int)iCurSequence].Draw((Vei2)pos, gfx, SpriteEffect::Damage(chroma),reversed);
 	}
 	else
 	{
-		animations[(int)iCurSequence].Draw((Vei2)pos, gfx, SpriteEffect::Chroma(chroma));
+		animations[(int)iCurSequence].Draw((Vei2)pos, gfx, SpriteEffect::Chroma(chroma), reversed);
 	}
 }
 
@@ -37,14 +38,19 @@ void Character::SetDirection( const Vec2& dir )
 	{
 		iCurSequence = Sequence::WalkingLeft;
 	}
-	else if( dir.y < 0.0f )
+	else if( dir.y != 0.0f )
 	{
-		iCurSequence = Sequence::WalkingUp;
+		if (iCurSequence == Sequence::StandingRight)
+		{
+			iCurSequence = Sequence::WalkingRight;
+		}
+		else if (iCurSequence == Sequence::StandingLeft)
+		{
+			iCurSequence = Sequence::WalkingLeft;
+		}
+		
 	}
-	else if( dir.y > 0.0f )
-	{
-		iCurSequence = Sequence::WalkingDown;
-	}
+	
 	else
 	{
 		if( vel.x > 0.0f )
@@ -55,14 +61,23 @@ void Character::SetDirection( const Vec2& dir )
 		{
 			iCurSequence = Sequence::StandingLeft;
 		}
-		else if( vel.y < 0.0f )
+		else 
+		if( vel.y != 0 )
 		{
-			iCurSequence = Sequence::StandingUp;
-		}
-		else if( vel.y > 0.0f )
+			if (iCurSequence == Sequence::WalkingLeft)
+			{
+				iCurSequence = Sequence::StandingLeft;
+			}
+		else
 		{
-			iCurSequence = Sequence::StandingDown;
+			iCurSequence = Sequence::StandingRight;
 		}
+
+				
+		}
+		
+		
+		
 	}
 	vel = dir * speed;
 }
