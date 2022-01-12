@@ -1,12 +1,10 @@
 #pragma once
-
 #include "Animation.h"
 #include "Vec2.h"
 #include "SpriteEffect.h"
 
-class Character
-{
-private:
+class Enemy {
+public:
 	enum class Sequence
 	{
 		WalkingLeft,
@@ -20,21 +18,20 @@ private:
 		Count
 	};
 public:
-	Character( const Vec2& pos );
-	void Draw( Graphics& gfx ) const;
-	void SetDirection( const Vec2& dir );
-	void Update( float dt );
-	Vec2 GetPosition()const;
-	// activates a damage visual effect
+	Enemy(const Vec2 pos, Surface& surf);
+	void Draw(Graphics& gfx) const;
+	void SetDirection(const Vec2& dir);
+	void Update(float dt);
 	void ActivateEffect();
+	Vec2 GetPosition()const;
 private:
-	Surface sprite = "Images\\Character64x64.bmp";
+	Surface& sprite;
 	Vec2 pos;
 	Vec2 vel = { 0.0f,0.0f };
 	const Color chroma = Colors::Magenta;
 	std::vector<Animation> animations;
 	Sequence iCurSequence = Sequence::StandingRight;
-	float speed = 110.0f;
+	float speed = 80.0f;
 	static constexpr float effectDuration = 0.045f;
 	float effectTime = 0.0f;
 	bool effectActive = false;

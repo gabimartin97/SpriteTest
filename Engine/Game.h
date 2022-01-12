@@ -30,6 +30,7 @@
 #include "Font.h"
 #include "Sound.h"
 #include "SpriteEffect.h"
+#include "Enemy.h"
 
 class Game
 {
@@ -54,5 +55,8 @@ private:
 	Font font = "Images\\Fixedsys16x28.bmp";
 	Sound hit = L"Sounds\\hit.wav";
 	Surface background = "Images\\Background.bmp";
+	Surface enemySurf = "Images\\Enemy64x64.bmp";
+	Enemy enemy;
+
 	/********************************/
 };

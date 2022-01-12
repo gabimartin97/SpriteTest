@@ -72,12 +72,9 @@ void Character::SetDirection( const Vec2& dir )
 		{
 			iCurSequence = Sequence::StandingRight;
 		}
-
-				
+		
 		}
-		
-		
-		
+				
 	}
 	vel = dir * speed;
 }
@@ -96,6 +93,11 @@ void Character::Update( float dt )
 			effectActive = false;
 		}
 	}
+}
+
+Vec2 Character::GetPosition() const
+{
+	return pos;
 }
 
 void Character::ActivateEffect()

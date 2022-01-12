@@ -24,10 +24,10 @@
 Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
-	gfx( wnd )
+	gfx( wnd ),
+	enemy(Vec2(50,50),enemySurf)
 {
-	Vei2 v;
-	auto v2 = v.GetNormalized();
+	
 }
 
 void Game::Go()
@@ -71,11 +71,15 @@ void Game::UpdateModel()
 	}
 	link.SetDirection( dir );
 	// update character
-	link.Update( ft.Mark() );
+	float dt = ft.Mark();
+	link.Update(dt);
+	enemy.SetDirection((link.GetPosition() - enemy.GetPosition()).GetNormalized());
+	enemy.Update(dt);
 }
 
 void Game::ComposeFrame()
 {
-	gfx.DrawSprite(0, 0, background, SpriteEffect::Copy());
+	//gfx.DrawSprite(0, 0, background, SpriteEffect::Copy());
 	link.Draw( gfx );
+	enemy.Draw(gfx);
 }
