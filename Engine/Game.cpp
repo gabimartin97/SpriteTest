@@ -40,17 +40,7 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
-	// process key messages while any remain
-	while (!wnd.kbd.KeyIsEmpty())
-	{
-		const auto e = wnd.kbd.ReadKey();
-		// only interested in space bar presses
-		if (e.IsPress() && e.GetCode() == VK_SPACE)
-		{
-			link.ActivateEffect();
-			hit.Play();
-		}
-	}
+
 	// process arrow keys state
 	Vec2 dir = { 0.0f,0.0f };
 	if (wnd.kbd.KeyIsPressed(VK_UP))
@@ -73,6 +63,34 @@ void Game::UpdateModel()
 	// update character
 	float dt = ft.Mark();
 	link.Update(dt);
+
+	//Genero proyectiles
+	if (!wnd.mouse.IsEmpty() )
+	{
+		if (wnd.mouse.Read().GetType() == Mouse::Event::Type::LPress )
+		{
+			Vec2 direction = Vec2(wnd.mouse.GetPos()) - link.GetPosition();
+			projectiles.emplace_back(link.GetPosition(), direction.Normalize(),(float)1000.0f, fireball);
+		}
+	}
+
+	//Actualizo proyectiles
+	for (auto i = projectiles.begin();i<projectiles.end(); ++i)
+	{
+		i->Update(dt);
+		/*
+		if (!RectI(i->GetHitbox()).IsOverlappingWith(gfx.GetScreenRect()))
+		{
+			projectiles.erase(i);
+		}
+		else
+		{
+			
+		}
+		*/
+	}
+
+
 	enemy.SetDirection((link.GetPosition() - enemy.GetPosition()).GetNormalized());
 	enemy.Update(dt);
 	if (link.IsColliding(enemy.GetHitbox()))
@@ -86,4 +104,8 @@ void Game::ComposeFrame()
 	//gfx.DrawSprite(0, 0, background, SpriteEffect::Copy());
 	link.Draw( gfx );
 	enemy.Draw(gfx);
+	for (Projectile& p : projectiles)
+	{
+		p.Draw(gfx);
+	}
 }

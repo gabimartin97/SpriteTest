@@ -31,6 +31,8 @@
 #include "Sound.h"
 #include "SpriteEffect.h"
 #include "Enemy.h"
+#include <vector>
+#include "Projectile.h"
 
 class Game
 {
@@ -56,7 +58,9 @@ private:
 	Sound hit = L"Sounds\\hit.wav";
 	Surface background = "Images\\Background.bmp";
 	Surface enemySurf = "Images\\Enemy64x64.bmp";
+	Surface fireball = "Images\\Projectile8x8.bmp";
 	Enemy enemy;
-
+	std::vector<Projectile> projectiles;
+	
 	/********************************/
 };

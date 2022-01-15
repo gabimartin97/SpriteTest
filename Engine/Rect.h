@@ -21,6 +21,14 @@ public:
 		:
 		Rect_( topLeft,topLeft + Vec2_<T>( width,height ) )
 	{}
+	template<typename S>
+	 Rect_(const Rect_<S>& src)
+		:
+		left((T)src.left),
+		right((T)src.right),
+		top((T)src.top),
+		bottom((T)src.bottom)
+	{}
 	bool IsOverlappingWith( const Rect_& other ) const
 	{
 		return right > other.left && left < other.right
@@ -56,6 +64,8 @@ public:
 	{
 		return bottom - top;
 	}
+
+	
 public:
 	T left;
 	T right;

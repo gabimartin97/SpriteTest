@@ -87,6 +87,9 @@
     <ClInclude Include="Character.h">
       <Filter>Entities</Filter>
     </ClInclude>
+    <ClInclude Include="Projectile.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXErr.cpp">
@@ -132,6 +135,9 @@
       <Filter>Entities</Filter>
     </ClCompile>
     <ClCompile Include="Enemy.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Projectile.cpp">
       <Filter>Entities</Filter>
     </ClCompile>
   </ItemGroup>
