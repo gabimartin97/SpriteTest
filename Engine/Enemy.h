@@ -24,6 +24,7 @@ public:
 	void Update(float dt);
 	void ActivateEffect();
 	Vec2 GetPosition()const;
+	RectF GetHitbox()const;
 private:
 	static constexpr int spriteWidth = 64;
 	static constexpr int spriteHeight = 64;

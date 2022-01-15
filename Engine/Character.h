@@ -27,10 +27,12 @@ public:
 	Vec2 GetPosition()const;
 	// activates a damage visual effect
 	void ActivateEffect();
+	bool IsColliding(const RectF object)const;
 private:
 	static constexpr int spriteWidth = 64;
 	static constexpr int spriteHeight = 64;
-
+	static constexpr float effectDuration = 0.045f;
+	static constexpr float invulnerabilityDuration = 0.5f;
 private:
 	Surface sprite = "Images\\Character64x64.bmp";
 	Vec2 pos;
@@ -40,7 +42,9 @@ private:
 	std::vector<Animation> animations;
 	Sequence iCurSequence = Sequence::StandingRight;
 	float speed = 110.0f;
-	static constexpr float effectDuration = 0.045f;
+	
 	float effectTime = 0.0f;
+	float invulnerabilityTime = 0.0f;
 	bool effectActive = false;
+	bool invulnerable = false;
 };

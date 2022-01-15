@@ -87,6 +87,7 @@ void Character::Update( float dt )
 	pos += vel * dt;
 	hitbox = RectF(pos+Vec2(5, 5), (float)(spriteWidth -10), ((float)spriteWidth -10));
 	animations[(int)iCurSequence].Update( dt );
+	
 	// update effect time if active
 	if( effectActive )
 	{
@@ -95,6 +96,14 @@ void Character::Update( float dt )
 		if( effectTime >= effectDuration )
 		{
 			effectActive = false;
+		}
+	}
+	if (invulnerable)
+	{
+		invulnerabilityTime += dt;
+		if (invulnerabilityTime >= invulnerabilityDuration)
+		{
+			invulnerable = false;
 		}
 	}
 }
@@ -106,6 +115,16 @@ Vec2 Character::GetPosition() const
 
 void Character::ActivateEffect()
 {
-	effectActive = true;
-	effectTime = 0.0f;
+	if (!invulnerable)
+	{
+		effectActive = true;
+		effectTime = 0.0f;
+		invulnerable = true;
+		invulnerabilityTime = 0.0f;
+	}
+}
+
+bool Character::IsColliding(const RectF object)const
+{
+	return hitbox.IsOverlappingWith(object);
 }

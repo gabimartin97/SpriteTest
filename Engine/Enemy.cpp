@@ -108,3 +108,8 @@ Vec2 Enemy::GetPosition() const
 {
 	return pos;
 }
+
+RectF Enemy::GetHitbox() const
+{
+	return hitbox;
+}
