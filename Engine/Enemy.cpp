@@ -3,12 +3,13 @@
 Enemy::Enemy(const Vec2 pos, Surface& surf)
 	:
 	pos(pos),
-	sprite(surf)
+	sprite(surf),
+	hitbox(pos, (float)spriteWidth, (float)spriteWidth)
 
 {
 	for (int i = 0; i < (int)Sequence::Count; i++)
 	{
-		animations.emplace_back(0, 0, 64, 64,7, sprite, 0.16f);
+		animations.emplace_back(0, 0, spriteWidth, spriteHeight, 7, sprite, 0.16f);
 	}
 	
 }
@@ -25,6 +26,7 @@ void Enemy::Draw(Graphics& gfx) const
 	{
 		animations[(int)iCurSequence].Draw((Vei2)pos, gfx, SpriteEffect::Chroma(chroma), reversed);
 	}
+	gfx.DrawRect(hitbox);
 }
 
 void Enemy::SetDirection(const Vec2& dir)
@@ -82,6 +84,7 @@ void Enemy::Update(float dt)
 {
 	pos += vel * dt;
 	animations[(int)iCurSequence].Update(dt);
+	hitbox = RectF(pos, (float)spriteWidth, (float)spriteWidth);
 	// update effect time if active
 	if (effectActive)
 	{
@@ -92,6 +95,7 @@ void Enemy::Update(float dt)
 			effectActive = false;
 		}
 	}
+
 }
 
 void Enemy::ActivateEffect()

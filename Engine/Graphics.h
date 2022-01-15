@@ -28,6 +28,7 @@
 #include "Rect.h"
 #include <cassert>
 
+
 class Graphics
 {
 public:
@@ -148,7 +149,38 @@ public:
 			}
 		}
 	}
+	
+	template<typename T>
+	void DrawRect(Rect_<T> rect, Color color = Colors::Red)
+	{
+		for (T y = rect.top; y <= rect.bottom; y++)
+		
+		{
+			if (y < 0 || y >= ScreenHeight)
+			{
+				continue;
+			}
+			else
+			{
+				for (T x = rect.left; x <= rect.right; x++)
+				{
+					if (x >= ScreenWidth || x < 0)
+					{
+						continue;
+					}
+					else
+					{
+						if (y == rect.top || y == rect.bottom || x == rect.left || x == rect.right)
+						{
+							PutPixel((int)x, (int)y, color);
+						}
+						
+					}
 
+				}
+			}
+		}
+	}
 	~Graphics();
 private:
 	Microsoft::WRL::ComPtr<IDXGISwapChain>				pSwapChain;

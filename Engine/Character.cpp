@@ -2,15 +2,16 @@
 
 Character::Character( const Vec2& pos )
 	:
-	pos( pos )
+	pos( pos ),
+	hitbox(pos,(float)spriteWidth,(float)spriteWidth)
 {
 	for( int i = 0; i < (int)Sequence::StandingLeft; i++ )
 	{
-		animations.emplace_back( Animation( 0,64,64,64,8,sprite,0.16f ) );
+		animations.emplace_back( Animation( 0,64, spriteWidth, spriteHeight,8,sprite,0.16f ) );
 	}
 	for( int i = (int)Sequence::StandingLeft; i < (int)Sequence::Count; i++ )
 	{
-		animations.emplace_back( Animation(0,0,64,64,8,sprite,0.16f ) );
+		animations.emplace_back( Animation(0,0, spriteWidth, spriteHeight,8,sprite,0.16f ) );
 	}
 }
 
@@ -26,6 +27,7 @@ void Character::Draw( Graphics& gfx ) const
 	{
 		animations[(int)iCurSequence].Draw((Vei2)pos, gfx, SpriteEffect::Chroma(chroma), reversed);
 	}
+	gfx.DrawRect(hitbox);
 }
 
 void Character::SetDirection( const Vec2& dir )
@@ -43,6 +45,7 @@ void Character::SetDirection( const Vec2& dir )
 		if (iCurSequence == Sequence::StandingRight)
 		{
 			iCurSequence = Sequence::WalkingRight;
+			
 		}
 		else if (iCurSequence == Sequence::StandingLeft)
 		{
@@ -82,6 +85,7 @@ void Character::SetDirection( const Vec2& dir )
 void Character::Update( float dt )
 {
 	pos += vel * dt;
+	hitbox = RectF(pos+Vec2(5, 5), (float)(spriteWidth -10), ((float)spriteWidth -10));
 	animations[(int)iCurSequence].Update( dt );
 	// update effect time if active
 	if( effectActive )

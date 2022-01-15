@@ -28,9 +28,14 @@ public:
 	// activates a damage visual effect
 	void ActivateEffect();
 private:
+	static constexpr int spriteWidth = 64;
+	static constexpr int spriteHeight = 64;
+
+private:
 	Surface sprite = "Images\\Character64x64.bmp";
 	Vec2 pos;
 	Vec2 vel = { 0.0f,0.0f };
+	RectF hitbox;
 	const Color chroma = Colors::Magenta;
 	std::vector<Animation> animations;
 	Sequence iCurSequence = Sequence::StandingRight;

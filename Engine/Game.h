@@ -51,7 +51,7 @@ private:
 	/********************************/
 	/*  User Variables              */
 	FrameTimer ft;
-	Character link = Character( { 100.0f,100.0f } );
+	Character link = Character( { 200.0f,200.0f } );
 	Font font = "Images\\Fixedsys16x28.bmp";
 	Sound hit = L"Sounds\\hit.wav";
 	Surface background = "Images\\Background.bmp";
