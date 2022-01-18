@@ -40,6 +40,11 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
+	#ifdef NDEBUG
+		float dt = ft.Mark();
+	#else
+		float dt = 1.0f / 60.0f;
+	#endif
 
 	// process arrow keys state
 	Vec2 dir = { 0.0f,0.0f };
@@ -61,7 +66,7 @@ void Game::UpdateModel()
 	}
 	link.SetDirection(dir);
 	// update character
-	float dt = ft.Mark();
+	
 	link.Update(dt);
 
 	//Genero proyectiles
