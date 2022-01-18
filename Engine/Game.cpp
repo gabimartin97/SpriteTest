@@ -43,7 +43,7 @@ void Game::UpdateModel()
 	#ifdef NDEBUG
 		float dt = ft.Mark();
 	#else
-		float dt = 1.0f / 60.0f;
+		float dt = 1.0f / 144.0f;
 	#endif
 
 	// process arrow keys state
@@ -75,24 +75,24 @@ void Game::UpdateModel()
 		if (wnd.mouse.Read().GetType() == Mouse::Event::Type::LPress )
 		{
 			Vec2 direction = Vec2(wnd.mouse.GetPos()) - link.GetPosition();
-			projectiles.emplace_back(link.GetHitbox().GetCenter(), direction.Normalize(), (float)1000.0f, fireball);
+			projectiles.emplace_back(link.GetHitbox().GetCenter(), direction.Normalize(), (float)1000.0f, &fireball);
 		}
 	}
 
 	//Actualizo proyectiles
-	for (auto i = projectiles.begin();i<projectiles.end(); ++i)
+	for (auto i = projectiles.begin();i<projectiles.end();)
 	{
 		i->Update(dt);
-		/*
+		
 		if (!RectI(i->GetHitbox()).IsOverlappingWith(gfx.GetScreenRect()))
 		{
-			projectiles.erase(i);
+			i=projectiles.erase(i);
 		}
 		else
 		{
-			
+			++i;
 		}
-		*/
+		
 	}
 
 

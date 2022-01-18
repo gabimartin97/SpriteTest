@@ -6,7 +6,7 @@
 class Projectile
 {
 public:
-	Projectile(const Vec2& pos, const Vec2& vel, float speed, Surface& surf);
+	Projectile(const Vec2& pos, const Vec2& vel, float speed, Surface* surf);
 	void Update(float dt);
 	void Draw(Graphics& gfx);
 	RectF GetHitbox() const;
@@ -16,6 +16,6 @@ private:
 	Vec2 vel;
 	float speed;
 	RectF hitbox;
-	Surface& surf;
+	Surface* surf;
 	Color chroma = Colors::Magenta;
 };
