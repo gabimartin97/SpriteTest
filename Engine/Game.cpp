@@ -70,7 +70,7 @@ void Game::UpdateModel()
 		if (wnd.mouse.Read().GetType() == Mouse::Event::Type::LPress )
 		{
 			Vec2 direction = Vec2(wnd.mouse.GetPos()) - link.GetPosition();
-			projectiles.emplace_back(link.GetPosition(), direction.Normalize(),(float)1000.0f, fireball);
+			projectiles.emplace_back(link.GetHitbox().GetCenter(), direction.Normalize(), (float)1000.0f, fireball);
 		}
 	}
 

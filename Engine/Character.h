@@ -25,6 +25,7 @@ public:
 	void SetDirection( const Vec2& dir );
 	void Update( float dt );
 	Vec2 GetPosition()const;
+	RectF GetHitbox()const;
 	// activates a damage visual effect
 	void ActivateEffect();
 	bool IsColliding(const RectF object)const;

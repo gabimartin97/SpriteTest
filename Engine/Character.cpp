@@ -113,6 +113,11 @@ Vec2 Character::GetPosition() const
 	return pos;
 }
 
+RectF Character::GetHitbox() const
+{
+	return hitbox;
+}
+
 void Character::ActivateEffect()
 {
 	if (!invulnerable)
