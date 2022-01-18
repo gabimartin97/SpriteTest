@@ -113,3 +113,8 @@ RectF Enemy::GetHitbox() const
 {
 	return hitbox;
 }
+
+void Enemy::GetDamage()
+{
+	ActivateEffect();
+}

@@ -83,10 +83,18 @@ void Game::UpdateModel()
 	for (auto i = projectiles.begin();i<projectiles.end();)
 	{
 		i->Update(dt);
+		RectI bulletHitbox = RectI(i->GetHitbox());
 		
-		if (!RectI(i->GetHitbox()).IsOverlappingWith(gfx.GetScreenRect()))
+		if (!bulletHitbox.IsOverlappingWith(gfx.GetScreenRect()))
 		{
+			//Proyectil fuera de la pantalla
 			i=projectiles.erase(i);
+		}
+		else if(bulletHitbox.IsOverlappingWith(RectI(enemy.GetHitbox())))
+		{
+			//Proyectil impacta enemigo
+			i = projectiles.erase(i);
+			enemy.GetDamage();
 		}
 		else
 		{
@@ -98,6 +106,8 @@ void Game::UpdateModel()
 
 	enemy.SetDirection((link.GetPosition() - enemy.GetPosition()).GetNormalized());
 	enemy.Update(dt);
+	
+
 	if (link.IsColliding(enemy.GetHitbox()))
 	{
 		link.ActivateEffect();
