@@ -83,14 +83,14 @@ void Game::UpdateModel()
 	for (auto i = projectiles.begin();i<projectiles.end();)
 	{
 		i->Update(dt);
-		RectI bulletHitbox = RectI(i->GetHitbox());
+		auto bulletHitbox = i->GetHitbox();
 		
 		if (!bulletHitbox.IsOverlappingWith(gfx.GetScreenRect()))
 		{
 			//Proyectil fuera de la pantalla
 			i=projectiles.erase(i);
 		}
-		else if(bulletHitbox.IsOverlappingWith(RectI(enemy.GetHitbox())))
+		else if(bulletHitbox.IsOverlappingWith(enemy.GetHitbox()))
 		{
 			//Proyectil impacta enemigo
 			i = projectiles.erase(i);
