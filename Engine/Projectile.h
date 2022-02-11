@@ -10,6 +10,8 @@ public:
 	void Update(float dt);
 	void Draw(Graphics& gfx);
 	RectF GetHitbox() const;
+	void SetImpact();
+	bool isCollided() const;
 
 private:
 	Vec2 pos;
@@ -18,4 +20,5 @@ private:
 	RectF hitbox;
 	Surface* surf;
 	Color chroma = Colors::Magenta;
+	bool impact = false;
 };

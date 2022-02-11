@@ -26,3 +26,13 @@ RectF Projectile::GetHitbox() const
 {
 	return hitbox;
 }
+
+void Projectile::SetImpact()
+{
+	impact = true;
+}
+
+bool Projectile::isCollided() const
+{
+	return impact;
+}

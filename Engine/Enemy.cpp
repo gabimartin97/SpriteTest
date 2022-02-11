@@ -26,7 +26,7 @@ void Enemy::Draw(Graphics& gfx) const
 	{
 		animations[(int)iCurSequence].Draw((Vei2)pos, gfx, SpriteEffect::Chroma(chroma), reversed);
 	}
-	gfx.DrawRect(hitbox);
+	//gfx.DrawRect(hitbox);
 }
 
 void Enemy::SetDirection(const Vec2& dir)

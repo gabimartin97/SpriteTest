@@ -20,13 +20,23 @@
  ******************************************************************************************/
 #include "MainWindow.h"
 #include "Game.h"
+#include <random>
 
 Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
-	gfx( wnd ),
-	enemy(Vec2(50,50),enemySurf)
+	gfx( wnd )
+	
 {
+	std::random_device dev;
+	std::mt19937 rng(dev());
+	std::uniform_int_distribution<int> xDist(-200, 1000); // distribution in range [-200, 1000]
+	std::uniform_int_distribution<int> yDist(-200, 800); // distribution in range [-200, 800]
+
+	for (int i = 0; i < 5; i++)
+	{
+		enemies.emplace_back(Vec2((float)xDist(rng), (float)yDist(rng)), enemySurf);
+	}
 	
 }
 
@@ -64,9 +74,8 @@ void Game::UpdateModel()
 	{
 		dir.x += 1.0f;
 	}
-	link.SetDirection(dir);
 	// update character
-	
+	link.SetDirection(dir);
 	link.Update(dt);
 
 	//Genero proyectiles
@@ -74,13 +83,13 @@ void Game::UpdateModel()
 	{
 		if (wnd.mouse.Read().GetType() == Mouse::Event::Type::LPress )
 		{
-			Vec2 direction = Vec2(wnd.mouse.GetPos()) - link.GetPosition();
+			Vec2 direction = Vec2(wnd.mouse.GetPos()) - link.GetPosition(); // Vector desde el personaje hasta el mouse
 			projectiles.emplace_back(link.GetHitbox().GetCenter(), direction.Normalize(), (float)1000.0f, &fireball);
 		}
 	}
 
 	//Actualizo proyectiles
-	for (auto i = projectiles.begin();i<projectiles.end();)
+	for (auto i = projectiles.begin();i<projectiles.end(); ++i)
 	{
 		i->Update(dt);
 		auto bulletHitbox = i->GetHitbox();
@@ -88,38 +97,52 @@ void Game::UpdateModel()
 		if (!bulletHitbox.IsOverlappingWith(gfx.GetScreenRect()))
 		{
 			//Proyectil fuera de la pantalla
-			i=projectiles.erase(i);
-		}
-		else if(bulletHitbox.IsOverlappingWith(enemy.GetHitbox()))
-		{
-			//Proyectil impacta enemigo
-			i = projectiles.erase(i);
-			enemy.GetDamage();
-		}
-		else
-		{
-			++i;
+			i->SetImpact();
 		}
 		
 	}
 
-
-	enemy.SetDirection((link.GetPosition() - enemy.GetPosition()).GetNormalized());
-	enemy.Update(dt);
-	
-
-	if (link.IsColliding(enemy.GetHitbox()))
+	// ACTUALIZO ENEMIGOS 
+	for (auto i = enemies.begin(); i < enemies.end(); ++i)
 	{
-		link.ActivateEffect();
+		i->SetDirection((link.GetPosition() - i->GetPosition()).GetNormalized());
+		i->Update(dt);
+		RectF enemyHitbox = i->GetHitbox();
+		//Primero chequeo si los enemigos entran en contacto con el presonaje
+		if (enemyHitbox.IsOverlappingWith(link.GetHitbox()))
+		{
+			link.ActivateEffect();
+		}
+		//Primero chequeo si los enemigos entran en contacto con los projectiles
+		for (Projectile& p : projectiles)
+		{
+			if (enemyHitbox.IsOverlappingWith(p.GetHitbox()))
+			{
+				p.SetImpact();
+				i->GetDamage();
+			}
+		}
+				
 	}
+
+		
+	//Destruyo projectiles
+	auto eraseFrom = std::remove_if(projectiles.begin(), projectiles.end(), [](Projectile& p) {return p.isCollided();});
+	projectiles.erase(eraseFrom, projectiles.end());
+
 }
 
 void Game::ComposeFrame()
 {
 	//gfx.DrawSprite(0, 0, background, SpriteEffect::Copy());
+
 	link.Draw( gfx );
-	enemy.Draw(gfx);
-	for (Projectile& p : projectiles)
+		
+	for ( Enemy& e : enemies)
+	{
+		e.Draw(gfx);
+	}
+	for ( Projectile& p : projectiles)
 	{
 		p.Draw(gfx);
 	}

@@ -59,8 +59,8 @@ private:
 	Surface background = "Images\\Background.bmp";
 	Surface enemySurf = "Images\\Enemy64x64.bmp";
 	Surface fireball = "Images\\Projectile8x8.bmp";
-	Enemy enemy;
 	std::vector<Projectile> projectiles;
+	std::vector<Enemy> enemies;
 	
 	/********************************/
 };
