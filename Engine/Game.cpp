@@ -53,7 +53,7 @@ void Game::UpdateModel()
 	#ifdef NDEBUG
 		float dt = ft.Mark();
 	#else
-		float dt = 1.0f / 144.0f;
+		float dt = 1.0f / 60.0f;
 	#endif
 
 	// process arrow keys state
@@ -102,29 +102,50 @@ void Game::UpdateModel()
 		
 	}
 
-	// ACTUALIZO ENEMIGOS 
-	for (auto i = enemies.begin(); i < enemies.end(); ++i)
+	//-----------------------ACTUALIZO ENEMIGOS -----------------------//
+	for (auto enemyIterator = enemies.begin(); enemyIterator < enemies.end(); ++enemyIterator)
 	{
-		i->SetDirection((link.GetPosition() - i->GetPosition()).GetNormalized());
-		i->Update(dt);
-		RectF enemyHitbox = i->GetHitbox();
+		RectF enemyHitbox = enemyIterator->GetHitbox();
+		Vec2 newEnemyDirection = Vec2(0,0);
 		//Primero chequeo si los enemigos entran en contacto con el presonaje
 		if (enemyHitbox.IsOverlappingWith(link.GetHitbox()))
 		{
 			link.ActivateEffect();
+			newEnemyDirection = Vec2(0,0);		//Para que no se superpongan con el personaje
+
 		}
-		//Primero chequeo si los enemigos entran en contacto con los projectiles
+		else
+		{
+			newEnemyDirection = (link.GetPosition() - enemyIterator->GetPosition()).GetNormalized(); //Persiguen al personaje
+		}
+		
+
+		//Luego chequeo si los enemigos entran en contacto con los projectiles
 		for (Projectile& p : projectiles)
 		{
 			if (enemyHitbox.IsOverlappingWith(p.GetHitbox()))
 			{
 				p.SetImpact();
-				i->GetDamage();
+				enemyIterator->GetDamage();
 			}
 		}
-				
-	}
+		//Por ultimo separo a los enemigos que se tocan entre si
+		for (auto i = enemies.begin(); i < enemies.end(); ++i)
+		{
+			if (enemyIterator == i) continue;
+			if (enemyHitbox.IsOverlappingWith(i->GetHitbox()))
+			{
+				//Hago que los enemigos se alejen entre si pero sigan persiguiendo al personaje
+				newEnemyDirection = (newEnemyDirection -(i->GetPosition() - enemyIterator->GetPosition()).GetNormalized()).GetNormalized();
+			}
 
+		}
+
+
+		enemyIterator->SetDirection(newEnemyDirection);
+		enemyIterator->Update(dt);
+	}
+	//-----------------------ACTUALIZO ENEMIGOS -----------------------//
 		
 	//Destruyo projectiles
 	auto eraseFrom = std::remove_if(projectiles.begin(), projectiles.end(), [](Projectile& p) {return p.isCollided();});

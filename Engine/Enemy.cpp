@@ -7,6 +7,8 @@ Enemy::Enemy(const Vec2 pos, Surface& surf)
 	hitbox(pos, (float)spriteWidth, (float)spriteWidth)
 
 {
+	hitbox = hitbox.GetExpanded(-2.0f);	//Reduzco la hitbox
+
 	for (int i = 0; i < (int)Sequence::Count; i++)
 	{
 		animations.emplace_back(0, 0, spriteWidth, spriteHeight, 7, sprite, 0.16f);
@@ -31,53 +33,56 @@ void Enemy::Draw(Graphics& gfx) const
 
 void Enemy::SetDirection(const Vec2& dir)
 {
-	if (dir.x > 0.0f)
+	if (!changedSequence)
 	{
-		iCurSequence = Sequence::WalkingRight;
-	}
-	else if (dir.x < 0.0f)
-	{
-		iCurSequence = Sequence::WalkingLeft;
-	}
-	else if (dir.y != 0.0f)
-	{
-		if (iCurSequence == Sequence::StandingRight)
+		if (dir.x > 0.0f)
 		{
 			iCurSequence = Sequence::WalkingRight;
 		}
-		else if (iCurSequence == Sequence::StandingLeft)
+		else if (dir.x < 0.0f)
 		{
 			iCurSequence = Sequence::WalkingLeft;
 		}
-
-	}
-
-	else
-	{
-		if (vel.x > 0.0f)
+		else if (dir.y != 0.0f)
 		{
-			iCurSequence = Sequence::StandingRight;
-		}
-		else if (vel.x < 0.0f)
-		{
-			iCurSequence = Sequence::StandingLeft;
-		}
-		else
-			if (vel.y != 0)
+			if (iCurSequence == Sequence::StandingRight)
 			{
-				if (iCurSequence == Sequence::WalkingLeft)
-				{
-					iCurSequence = Sequence::StandingLeft;
-				}
-				else
-				{
-					iCurSequence = Sequence::StandingRight;
-				}
-
+				iCurSequence = Sequence::WalkingRight;
+			}
+			else if (iCurSequence == Sequence::StandingLeft)
+			{
+				iCurSequence = Sequence::WalkingLeft;
 			}
 
+		}
+
+		else
+		{
+			if (vel.x > 0.0f)
+			{
+				iCurSequence = Sequence::StandingRight;
+			}
+			else if (vel.x < 0.0f)
+			{
+				iCurSequence = Sequence::StandingLeft;
+			}
+			else
+				if (vel.y != 0)
+				{
+					if (iCurSequence == Sequence::WalkingLeft)
+					{
+						iCurSequence = Sequence::StandingLeft;
+					}
+					else
+					{
+						iCurSequence = Sequence::StandingRight;
+					}
+
+				}
+		}
+		changedSequence = true;
 	}
-	vel = dir * speed;
+				vel = dir * speed;
 }
 
 void Enemy::Update(float dt)
@@ -93,6 +98,17 @@ void Enemy::Update(float dt)
 		if (effectTime >= effectDuration)
 		{
 			effectActive = false;
+		}
+	}
+	// solo cambiar la animacion de la dirección cada x tiempo
+	if (changedSequence)
+	{
+		sequenceTimer += dt;
+		// deactivate effect if duration exceeded
+		if (sequenceTimer >= sequenceCooldown)
+		{
+			changedSequence = false;
+			sequenceTimer = 0.0f;
 		}
 	}
 

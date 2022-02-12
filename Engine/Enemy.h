@@ -39,8 +39,12 @@ private:
 	const Color chroma = Colors::Magenta;
 	std::vector<Animation> animations;
 	Sequence iCurSequence = Sequence::StandingRight;
-	float speed = 80.0f;
+	
 	static constexpr float effectDuration = 0.045f;
+	static constexpr float sequenceCooldown = 0.200f;	//Para que la animacion no pase de izq a derecha tan rapido
+	float sequenceTimer = 0.0f;
+	float speed = 80.0f;
 	float effectTime = 0.0f;
 	bool effectActive = false;
+	bool changedSequence = false;
 };
