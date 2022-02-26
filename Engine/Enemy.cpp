@@ -1,17 +1,16 @@
 #include "Enemy.h"
 
-Enemy::Enemy(const Vec2 pos, Surface& surf)
+Enemy::Enemy(const Vec2 pos, Surface* surf) 
 	:
 	pos(pos),
 	sprite(surf),
 	hitbox(pos, (float)spriteWidth, (float)spriteWidth)
-
 {
 	hitbox = hitbox.GetExpanded(-2.0f);	//Reduzco la hitbox
 
 	for (int i = 0; i < (int)Sequence::Count; i++)
 	{
-		animations.emplace_back(0, 0, spriteWidth, spriteHeight, 7, sprite, 0.16f);
+		animations.emplace_back(0, 0, spriteWidth, spriteHeight, 7, *sprite, 0.16f);
 	}
 	
 }
@@ -20,7 +19,7 @@ void Enemy::Draw(Graphics& gfx) const
 {
 	// if effect active, draw sprite replacing opaque pixels with red
 	bool reversed = iCurSequence == Sequence::WalkingLeft || iCurSequence == Sequence::StandingLeft;
-	if (effectActive)
+	if (DmgEffectActive)
 	{
 		animations[(int)iCurSequence].Draw((Vei2)pos, gfx, SpriteEffect::Damage(chroma), reversed);
 	}
@@ -91,13 +90,13 @@ void Enemy::Update(float dt)
 	animations[(int)iCurSequence].Update(dt);
 	hitbox = RectF(pos, (float)spriteWidth, (float)spriteWidth);
 	// update effect time if active
-	if (effectActive)
+	if (DmgEffectActive)
 	{
-		effectTime += dt;
+		DmgEffectTime += dt;
 		// deactivate effect if duration exceeded
-		if (effectTime >= effectDuration)
+		if (DmgEffectTime >= effectDuration)
 		{
-			effectActive = false;
+			DmgEffectActive = false;
 		}
 	}
 	// solo cambiar la animacion de la dirección cada x tiempo
@@ -114,11 +113,7 @@ void Enemy::Update(float dt)
 
 }
 
-void Enemy::ActivateEffect()
-{
-	effectActive = true;
-	effectTime = 0.0f;
-}
+
 
 Vec2 Enemy::GetPosition() const
 {
@@ -130,7 +125,14 @@ RectF Enemy::GetHitbox() const
 	return hitbox;
 }
 
-void Enemy::GetDamage()
+void Enemy::GetDamage(const int dmg)
 {
-	ActivateEffect();
+	DmgEffectActive = true;
+	DmgEffectTime = 0.0f;
+	health -= dmg;
+}
+
+bool Enemy::IsDead() const
+{
+	return health <= 0;
 }

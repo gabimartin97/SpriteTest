@@ -35,7 +35,7 @@ Game::Game( MainWindow& wnd )
 
 	for (int i = 0; i < 5; i++)
 	{
-		enemies.emplace_back(Vec2((float)xDist(rng), (float)yDist(rng)), enemySurf);
+		enemies.emplace_back(Vec2((float)xDist(rng), (float)yDist(rng)), &enemySurf);
 	}
 	
 }
@@ -103,6 +103,12 @@ void Game::UpdateModel()
 	}
 
 	//-----------------------ACTUALIZO ENEMIGOS -----------------------//
+
+	{
+		auto removeFrom = std::remove_if(enemies.begin(), enemies.end(), [](Enemy& e) {return e.IsDead(); });
+		enemies.erase(removeFrom, enemies.end());
+	}
+
 	for (auto enemyIterator = enemies.begin(); enemyIterator < enemies.end(); ++enemyIterator)
 	{
 		RectF enemyHitbox = enemyIterator->GetHitbox();
@@ -126,7 +132,7 @@ void Game::UpdateModel()
 			if (enemyHitbox.IsOverlappingWith(p.GetHitbox()))
 			{
 				p.SetImpact();
-				enemyIterator->GetDamage();
+				enemyIterator->GetDamage(10);
 			}
 		}
 		//Por ultimo separo a los enemigos que se tocan entre si
