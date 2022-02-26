@@ -42,10 +42,14 @@ private:
 	
 	static constexpr float effectDuration = 0.045f;
 	static constexpr float sequenceCooldown = 0.200f;	//Para que la animacion no pase de izq a derecha tan rapido
+	static constexpr float fadePeriod = 0.02f;
 	float sequenceTimer = 0.0f;
+	float fadeTimer = 0.0f;
+	unsigned char fadeValue = 0;
 	float speed = 80.0f;
 	float DmgEffectTime = 0.0f;
 	bool DmgEffectActive = false;
 	bool changedSequence = false;
+
 	int health = 100;
 };

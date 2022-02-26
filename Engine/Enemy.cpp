@@ -19,7 +19,11 @@ void Enemy::Draw(Graphics& gfx) const
 {
 	// if effect active, draw sprite replacing opaque pixels with red
 	bool reversed = iCurSequence == Sequence::WalkingLeft || iCurSequence == Sequence::StandingLeft;
-	if (DmgEffectActive)
+	if (health <= 0)
+	{
+		animations[(int)iCurSequence].Draw((Vei2)pos, gfx, SpriteEffect::Luminate(chroma, fadeValue), reversed);
+	}
+	else if (DmgEffectActive)
 	{
 		animations[(int)iCurSequence].Draw((Vei2)pos, gfx, SpriteEffect::Damage(chroma), reversed);
 	}
@@ -86,11 +90,24 @@ void Enemy::SetDirection(const Vec2& dir)
 
 void Enemy::Update(float dt)
 {
-	pos += vel * dt;
+	if (fadeValue <= 100) //Se empieza a desvanecer y luego se detiene
+	{
+		pos += vel * dt;
+	}
+	
 	animations[(int)iCurSequence].Update(dt);
 	hitbox = RectF(pos, (float)spriteWidth, (float)spriteWidth);
 	// update effect time if active
-	if (DmgEffectActive)
+	if (health <= 0)
+	{
+		fadeTimer += dt;
+		if (fadePeriod >= fadeTimer)
+		{
+			fadeValue+=5;
+			fadeTimer = 0;
+		}
+	} 
+	else if (DmgEffectActive)
 	{
 		DmgEffectTime += dt;
 		// deactivate effect if duration exceeded
@@ -134,5 +151,5 @@ void Enemy::GetDamage(const int dmg)
 
 bool Enemy::IsDead() const
 {
-	return health <= 0;
+	return fadeValue>=255;
 }

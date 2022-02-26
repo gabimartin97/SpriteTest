@@ -91,4 +91,32 @@ namespace SpriteEffect
 	private:
 		Color chroma;
 	};
+
+	class Luminate
+	{
+	public:
+		Luminate(Color c, unsigned char value)
+			:
+			chroma(c),
+			value(value)
+		{}
+		void operator()(Color src, int xDest, int yDest, Graphics& gfx) const
+		{
+			if (src != chroma)
+			{
+				unsigned char red = (src.GetR() + value);
+				unsigned char green = (src.GetG() + value);
+				unsigned char blue = (src.GetB() + value);
+				if ((src.GetR() + value) >= 255) red = 255;
+				if ((src.GetG() + value) >= 255) green = 255;
+				if ((src.GetB() + value) >= 255) blue = 255;
+				const Color blend = {red,green,blue};
+				
+				gfx.PutPixel(xDest, yDest, blend);
+			}
+		}
+	private:
+		Color chroma;
+		unsigned char value;
+	};
 }
